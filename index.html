@@ -45,8 +45,8 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="flex flex-col gap-3">
                 <div class="flex flex-col items-center gap-3">
-                    <img src="https://scontent.fvii2-4.fna.fbcdn.net/v/t39.30808-6/641356478_919029251054275_2079000636574630761_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeEtnR-weGdbEmYe1x1I64pnm_uO57k1WSSb-47nuTVZJOJk-4ft-Q-EazyuU2Z_OZTTqbf_sM7o-8r6GtZGnvIl&_nc_ohc=hYUauS6YWOgQ7kNvwHYWylG&_nc_oc=Adn_UE5I__WBk6tZr8cxXMgQ03i5FUX1PSQLPyfn_7mfukYcIeQ_xCVR1eu-SKIKK08hu_u_H4Lg2TTaURNZnlBi&_nc_zt=23&_nc_ht=scontent.fvii2-4.fna&_nc_gid=Sf0J-chl-69G3XmIdQzipw&_nc_ss=8&oh=00_Afs36JUDT-DDHzduqwCz2jc5XRZG_5H6cJWLHe42EqpGAQ&oe=69A8F1B7" class="avatar float-anim" />
-                    <div class="name-box w-full">MinhNhat</div>
+                    <img src="https://scontent.fvii2-4.fna.fbcdn.net/v/t39.30808-6/641356478_919029251054275_2079000636574630761_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeEtnR-weGdbEmYe1x1I64pnm_uO57k1WSSb-47nuTVZJOJk-4ft-Q-EazyuU2Z_OZTTqbf_sM7o-8r6GtZGnvIl&_nc_ohc=hYUauS6YWOgQ7kNvwHYWylG&_nc_oc=Adn_UE5I__WBk6tZr8cxXMgQ03i5FUX1PSQLPyfn_7mfukYcIeQ_xCVR1eu-SKIKK08hu_u_H4Lg2TTaURNZnlBi&_nc_zt=23&_nc_ht=scontent.fvii2-4.fna&_nc_gid=Sf0J-chl-69G3XmIdQzipw&_nc_ss=8&oh=00_Afs36JUDT-DDHzduqwCz2jc5XRZG_5H6cJWLHe42EqpGAQ&oe=69A8F1B7" class="avatar float-anim" id="avatarImg" style="cursor:pointer; -webkit-user-select:none; user-select:none;" />
+                    <div class="name-box w-full" id="nameBox">MinhNhat</div>
                 </div>
                 <div class="pixel-card w-full">
                     <h2 class="exe-title mb-2">STATS</h2>
@@ -188,13 +188,52 @@
             document.getElementById('quoteAuthor').textContent = quotes[currentQuote].author;
         }, 8000);
 
-        // Easter Egg ẩn (Gốc của bạn)
+        // Easter Egg ẩn - bàn phím máy tính (Gốc của bạn)
         let _k = '';
         document.addEventListener('keydown', (e) => {
             _k += e.key.toLowerCase();
             if (_k.includes('love') || _k.includes('phuonganh')) {
                 document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
                 document.getElementById('headerTitle').style.color = '#ff6b9d';
+            }
+        });
+
+        // Easter Egg ẩn - nhấn giữ avatar 1.5 giây (hoạt động trên điện thoại)
+        let pressTimer = null;
+        const avatar = document.getElementById('avatarImg');
+
+        function triggerEasterEgg() {
+            document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
+            document.getElementById('headerTitle').style.color = '#ff6b9d';
+        }
+
+        // Touch (điện thoại)
+        avatar.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            pressTimer = setTimeout(triggerEasterEgg, 1500);
+        }, { passive: false });
+        avatar.addEventListener('touchend', () => clearTimeout(pressTimer));
+        avatar.addEventListener('touchmove', () => clearTimeout(pressTimer));
+
+        // Mouse (máy tính - giữ chuột)
+        avatar.addEventListener('mousedown', () => {
+            pressTimer = setTimeout(triggerEasterEgg, 1500);
+        });
+        avatar.addEventListener('mouseup', () => clearTimeout(pressTimer));
+        avatar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+
+        // Easter Egg ẩn - nhấn tên "MinhNhat" 5 lần (hoạt động trên điện thoại)
+        let tapCount = 0;
+        let tapTimer = null;
+        document.getElementById('nameBox').addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimer);
+            if (tapCount >= 5) {
+                document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
+                document.getElementById('headerTitle').style.color = '#ff6b9d';
+                tapCount = 0;
+            } else {
+                tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
             }
         });
     </script>

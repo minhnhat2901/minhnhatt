@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MinhNhat 🤡</title>
+    <title>MinhNhat 💔</title>
 
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -27,6 +27,9 @@
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -2;
+            /* Fix cho iOS Safari */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
         }
         #bg-overlay {
             position: fixed;
@@ -241,12 +244,13 @@
 
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- ===== VIDEO NỀN (có âm thanh, không muted) ===== -->
-    <video id="bg-video" loop playsinline>
+    <!-- ===== VIDEO NỀN ===== -->
+    <!-- iOS bắt buộc phải có muted mới tự phát. Sẽ unmute khi user chạm lần đầu -->
+    <video id="bg-video" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false">
         <source src="your-video.mp4" type="video/mp4">
     </video>
     <div id="bg-overlay"></div>
-    <!-- ================================================= -->
+    <!-- ==================== -->
 
     <div class="os-window p-4" style="width:100%;max-width:480px">
         <div class="flex justify-between items-center mb-2">
@@ -361,16 +365,27 @@
             document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN");
         }, 1000);
 
-        // Autoplay video khi người dùng chạm/click vào trang
+        // Autoplay video - muted để chạy được trên iOS/Android
+        // Unmute sau khi user chạm lần đầu để có âm thanh
         const bgVideo = document.getElementById('bg-video');
-        function tryPlay() {
-            bgVideo.play().catch(() => {});
-            document.removeEventListener('click', tryPlay);
-            document.removeEventListener('touchstart', tryPlay);
+
+        function unmuteOnInteraction() {
+            bgVideo.muted = false;
+            document.removeEventListener('touchstart', unmuteOnInteraction);
+            document.removeEventListener('click', unmuteOnInteraction);
         }
+        document.addEventListener('touchstart', unmuteOnInteraction, { once: true });
+        document.addEventListener('click', unmuteOnInteraction, { once: true });
+
+        // Fallback: nếu autoplay bị chặn, thử play khi user chạm
         bgVideo.play().catch(() => {
-            document.addEventListener('click', tryPlay);
-            document.addEventListener('touchstart', tryPlay);
+            function tryPlay() {
+                bgVideo.play().catch(() => {});
+                document.removeEventListener('touchstart', tryPlay);
+                document.removeEventListener('click', tryPlay);
+            }
+            document.addEventListener('touchstart', tryPlay, { once: true });
+            document.addEventListener('click', tryPlay, { once: true });
         });
 
         // Quotes

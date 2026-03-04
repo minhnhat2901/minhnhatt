@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MinhNhat 💔</title>
+    <title>MinhNhat &#x1F494;</title>
 
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -27,9 +27,6 @@
             width: 100%; height: 100%;
             object-fit: cover;
             z-index: -2;
-            /* Fix cho iOS Safari */
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
         }
         #bg-overlay {
             position: fixed;
@@ -236,6 +233,82 @@
             flex-shrink: 0;
         }
 
+        /* ── Popup bật âm thanh ── */
+        #soundPrompt {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.50);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        #soundPromptBox {
+            text-align: center;
+            padding: 28px 32px;
+            animation: popIn 0.3s ease;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to   { transform: scale(1);    opacity: 1; }
+        }
+        .prompt-icon { font-size: 42px; display: block; margin-bottom: 10px; }
+        .prompt-title {
+            font-family: "VT323", monospace;
+            font-size: 22px;
+            color: #fff;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.9);
+            margin-bottom: 6px;
+        }
+        .prompt-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 20px;
+        }
+        .prompt-btn {
+            font-family: "VT323", monospace;
+            font-size: 18px;
+            padding: 8px 30px;
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.35);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .prompt-btn:hover { background: rgba(255,255,255,0.25); }
+        .prompt-btn-skip {
+            font-size: 10px;
+            color: rgba(255,255,255,0.40);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: "Roboto Mono", monospace;
+        }
+
+        /* ── Nút loa nhỏ góc phải ── */
+        #soundBtn {
+            position: fixed;
+            bottom: 16px; right: 16px;
+            z-index: 10;
+            width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.30);
+            border: 1px solid rgba(255,255,255,0.20);
+            border-radius: 50%;
+            color: #fff; font-size: 13px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+        #soundBtn:hover { background: rgba(0,0,0,0.50); }
+
         /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.20); border-radius: 3px; }
@@ -244,13 +317,26 @@
 
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- ===== VIDEO NỀN ===== -->
-    <!-- iOS bắt buộc phải có muted mới tự phát. Sẽ unmute khi user chạm lần đầu -->
-    <video id="bg-video" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false">
+    <!-- VIDEO: muted để autoplay được trên mobile -->
+    <video id="bg-video" autoplay muted loop playsinline webkit-playsinline>
         <source src="your-video.mp4" type="video/mp4">
     </video>
     <div id="bg-overlay"></div>
-    <!-- ==================== -->
+
+    <!-- Popup bật âm thanh - hiện ngay khi load -->
+    <div id="soundPrompt">
+        <div id="soundPromptBox">
+            <span class="prompt-icon">👆</span>
+            <div class="prompt-title">Click here to enter</div>
+            <div class="prompt-sub">Chạm để vào trang</div>
+            <button class="prompt-btn" id="btnYesSound">ENTER</button>
+        </div>
+    </div>
+
+    <!-- Nút loa nhỏ góc phải để toggle -->
+    <button id="soundBtn" title="Bật/tắt âm thanh" style="display:none">
+        <i id="soundIcon" class="fas fa-volume-up"></i>
+    </button>
 
     <div class="os-window p-4" style="width:100%;max-width:480px">
         <div class="flex justify-between items-center mb-2">
@@ -365,27 +451,31 @@
             document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN");
         }, 1000);
 
-        // Autoplay video - muted để chạy được trên iOS/Android
-        // Unmute sau khi user chạm lần đầu để có âm thanh
+        // Video + popup âm thanh
         const bgVideo = document.getElementById('bg-video');
+        const soundPrompt = document.getElementById('soundPrompt');
+        const soundBtn = document.getElementById('soundBtn');
+        const soundIcon = document.getElementById('soundIcon');
 
-        function unmuteOnInteraction() {
-            bgVideo.muted = false;
-            document.removeEventListener('touchstart', unmuteOnInteraction);
-            document.removeEventListener('click', unmuteOnInteraction);
-        }
-        document.addEventListener('touchstart', unmuteOnInteraction, { once: true });
-        document.addEventListener('click', unmuteOnInteraction, { once: true });
-
-        // Fallback: nếu autoplay bị chặn, thử play khi user chạm
-        bgVideo.play().catch(() => {
-            function tryPlay() {
-                bgVideo.play().catch(() => {});
-                document.removeEventListener('touchstart', tryPlay);
-                document.removeEventListener('click', tryPlay);
+        function dismissPrompt(withSound) {
+            soundPrompt.style.opacity = '0';
+            soundPrompt.style.transition = 'opacity 0.3s';
+            setTimeout(() => soundPrompt.style.display = 'none', 300);
+            soundBtn.style.display = 'flex';
+            if (withSound) {
+                bgVideo.muted = false;
+                soundIcon.className = 'fas fa-volume-up';
+            } else {
+                soundIcon.className = 'fas fa-volume-mute';
             }
-            document.addEventListener('touchstart', tryPlay, { once: true });
-            document.addEventListener('click', tryPlay, { once: true });
+        }
+
+        document.getElementById('btnYesSound').addEventListener('click', () => dismissPrompt(true));
+        document.getElementById('btnNoSound').addEventListener('click', () => dismissPrompt(false));
+
+        soundBtn.addEventListener('click', () => {
+            bgVideo.muted = !bgVideo.muted;
+            soundIcon.className = bgVideo.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         });
 
         // Quotes

@@ -312,6 +312,7 @@
             <div class="prompt-title">Click here to enter</div>
             <div class="prompt-sub">Chạm để vào trang</div>
             <button class="prompt-btn" id="btnYesSound">ENTER</button>
+            <button class="prompt-btn-skip" id="btnNoSound">❤️</button>
         </div>
     </div>
 
@@ -411,9 +412,9 @@
                 <div class="pixel-card flex flex-col justify-between">
                     <div>
                         <h2 class="exe-title mb-1"><i class="fas fa-quote-left"></i> QUOTE</h2>
-                        <p id="quoteText" class="italic text-xs leading-relaxed" style="color:#f0f0f0">"Kẻ mạnh không phải là kẻ chiến thắng người khác, mà là kẻ chiến thắng chính mình."</p>
+                        <p id="quoteText" class="italic text-xs leading-relaxed" style="color:#f0f0f0;transition:opacity 0.5s ease">"Kẻ mạnh không phải là kẻ chiến thắng người khác, mà là kẻ chiến thắng chính mình."</p>
                     </div>
-                    <p id="quoteAuthor" class="text-right text-xs mt-2" style="opacity:0.65;color:#fff">- Aristotle</p>
+                    <p id="quoteAuthor" class="text-right text-xs mt-2" style="color:#fff;opacity:0.65;transition:opacity 0.5s ease">- Aristotle</p>
                 </div>
 
             </div>
@@ -465,20 +466,24 @@
         let currentQuote = 0;
         const qt = document.getElementById('quoteText');
         const qa = document.getElementById('quoteAuthor');
-        qt.style.transition = 'opacity 0.5s ease';
-        qa.style.transition = 'opacity 0.5s ease';
 
-        setInterval(() => {
+        function nextQuote() {
+            // Fade out
             qt.style.opacity = '0';
             qa.style.opacity = '0';
+
             setTimeout(() => {
+                // Đổi nội dung
                 currentQuote = (currentQuote + 1) % quotes.length;
                 qt.textContent = quotes[currentQuote].text;
                 qa.textContent = quotes[currentQuote].author;
+                // Fade in
                 qt.style.opacity = '1';
                 qa.style.opacity = '0.65';
-            }, 500);
-        }, 7000);
+            }, 550);
+        }
+
+        setInterval(nextQuote, 7000);
 
         // Easter Egg - bàn phím
         let _k = '';

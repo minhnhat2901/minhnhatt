@@ -460,7 +460,10 @@
         function dismissPrompt(withSound) {
             soundPrompt.style.opacity = '0';
             soundPrompt.style.transition = 'opacity 0.3s';
-            setTimeout(() => soundPrompt.style.display = 'none', 300);
+            setTimeout(() => {
+                soundPrompt.style.display = 'none';
+                soundPrompt.dataset.closed = 'true';
+            }, 300);
             soundBtn.style.display = 'flex';
             if (withSound) {
                 bgVideo.muted = false;
@@ -516,14 +519,18 @@
             }
         });
 
-        // Easter Egg - giữ avatar
+        // Easter Egg - giữ avatar (chỉ hoạt động sau khi popup đã đóng)
         let pressTimer = null;
         const avatar = document.getElementById('avatarImg');
         function triggerEasterEgg() {
             document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
             document.getElementById('headerTitle').style.color = '#ff6b9d';
         }
-        avatar.addEventListener('touchstart', (e) => { e.preventDefault(); pressTimer = setTimeout(triggerEasterEgg, 1500); }, { passive: false });
+        avatar.addEventListener('touchstart', (e) => {
+            if (soundPrompt.dataset.closed === 'true') {
+                pressTimer = setTimeout(triggerEasterEgg, 1500);
+            }
+        });
         avatar.addEventListener('touchend', () => clearTimeout(pressTimer));
         avatar.addEventListener('touchmove', () => clearTimeout(pressTimer));
         avatar.addEventListener('mousedown', () => { pressTimer = setTimeout(triggerEasterEgg, 1500); });
@@ -533,6 +540,7 @@
         // Easter Egg - nhấn tên 5 lần
         let tapCount = 0, tapTimer = null;
         document.getElementById('nameBox').addEventListener('click', () => {
+            if (soundPrompt.dataset.closed !== 'true') return;
             tapCount++;
             clearTimeout(tapTimer);
             if (tapCount >= 5) {

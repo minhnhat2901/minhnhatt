@@ -11,184 +11,397 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        :root { --bg: #e6e6e6; --card: #f2f2f2; --text: #111827; --border: #111827; --gray: #6b7280; --grid: #cfd2d6; }
-        body { font-family: "Roboto Mono", monospace; background-color: var(--bg); color: var(--text); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 16px 16px; }
-        .os-window { background: var(--card); border: 4px solid var(--border); box-shadow: 6px 6px 0 var(--gray); }
-        .exe-title { font-family: "VT323", monospace; font-size: 20px; letter-spacing: 1px; }
-        .avatar { width: 140px; height: 140px; object-fit: cover; border: 4px solid var(--border); image-rendering: pixelated; }
-        .name-box { font-family: "VT323", monospace; font-size: 28px; background: #e0e0e0; border: 3px solid var(--border); box-shadow: 4px 4px 0 var(--gray); padding: 6px 14px; text-align: center; }
-        .pixel-card { background: var(--card); border: 3px solid var(--border); box-shadow: 4px 4px 0 var(--gray); padding: 14px; height: 100%; }
-        .tag { font-family: "VT323", monospace; font-size: 16px; padding: 4px 10px; background: #e0e0e0; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--gray); cursor: pointer; }
-        .skill-bar { height: 12px; border: 2px solid var(--border); background: #e0e0e0; }
-        .skill-fill { height: 100%; background: var(--border); }
-        .social-link { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); background: #e0e0e0; box-shadow: 2px 2px 0 var(--gray); color: var(--text); transition: all 0.2s ease; }
-        .social-link:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--gray); }
-        .theme-toggle { position: fixed; top: 12px; right: 12px; width: 44px; height: 44px; border: 3px solid var(--border); background: var(--card); box-shadow: 3px 3px 0 var(--gray); display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; }
-        body.dark { --bg: #1a1a2e; --card: #25253a; --text: #e0e0ff; --border: #6c5ce7; --gray: #4a4a6a; --grid: #2a2a4a; }
-        .status-online { color: #00ff00; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: "Roboto Mono", monospace;
+            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* ── Video nền ── */
+        #bg-video {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        #bg-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.08);
+            z-index: -1;
+        }
+
+        /* ── Cửa sổ chính ── */
+        .os-window {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 12px;
+        }
+
+        /* ── Pixel card ── */
+        .pixel-card {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 8px;
+            padding: 9px 11px;
+            height: 100%;
+        }
+
+        /* ── Hobby item ── */
+        .hobby-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 6px;
+            background: transparent;
+            border: none;
+            border-radius: 5px;
+            transition: opacity 0.2s;
+            cursor: default;
+        }
+        .hobby-item:hover { opacity: 0.7; }
+        .hobby-icon {
+            font-size: 11px;
+            width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent;
+            border-radius: 4px;
+            flex-shrink: 0;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+        }
+        .hobby-label {
+            font-family: "VT323", monospace;
+            font-size: 13px;
+            color: #fff;
+            line-height: 1;
+        }
+        .hobby-desc {
+            font-size: 9px;
+            color: rgba(255,255,255,0.50);
+            line-height: 1.2;
+        }
+
+        #bg-overlay {
+            display: none;
+        }
+
+        .exe-title {
+            font-family: "VT323", monospace;
+            font-size: 17px;
+            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .divider { border-top: none; }
+
+        .avatar {
+            width: 80px; height: 80px;
+            object-fit: cover;
+            border: none;
+            border-radius: 7px;
+            image-rendering: pixelated;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.40);
+        }
+
+        .name-box {
+            font-family: "VT323", monospace;
+            font-size: 22px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            padding: 3px 10px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+            width: 100%;
+        }
+
+        .tag {
+            font-family: "VT323", monospace;
+            font-size: 13px;
+            padding: 2px 7px;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+            transition: opacity 0.2s;
+        }
+        .tag:hover { opacity: 0.7; }
+
+        .skill-bar {
+            height: 5px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .skill-fill {
+            height: 100%;
+            background: rgba(255,255,255,0.80);
+            border-radius: 999px;
+        }
+
+        .social-link {
+            width: 32px; height: 32px;
+            font-size: 13px;
+            display: flex; align-items: center; justify-content: center;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            color: #fff;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+        }
+        .social-link:hover {
+            opacity: 0.7;
+            transform: translateY(-2px);
+        }
+
+        .status-online { color: #4ade80; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
         .float-anim { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+
+        #quoteText, #quoteAuthor { transition: opacity 0.6s ease; }
+
+        /* Scrollbar */
+        .social-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            transition: opacity 0.2s;
+        }
+        .social-row:hover { opacity: 0.65; }
+        .social-row-icon {
+            font-size: 13px;
+            width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+        }
+        .social-row-name {
+            font-family: "VT323", monospace;
+            font-size: 14px;
+            color: #fff;
+            line-height: 1;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+        }
+        .social-row-sub {
+            font-size: 9px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.3;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+        }
+
+        .hobby-desc {
+            font-size: 9px;
+            color: rgba(255,255,255,0.55);
+            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+            line-height: 1.2;
+        }
+
+        .hobby-tag-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+        }
+        .star-rate {
+            font-size: 10px;
+            color: rgba(255,255,255,0.75);
+            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.20); border-radius: 3px; }
     </style>
 </head>
 
-<body class="flex items-start justify-center min-h-screen p-3">
-    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
-    <audio id="bgmAudio" preload="auto"></audio>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <div class="os-window w-full max-w-4xl p-4 my-4">
-        <div class="flex justify-between items-center mb-4">
+    <!-- ===== VIDEO NỀN (có âm thanh, không muted) ===== -->
+    <video id="bg-video" loop playsinline>
+        <source src="your-video.mp4" type="video/mp4">
+    </video>
+    <div id="bg-overlay"></div>
+    <!-- ================================================= -->
+
+    <div class="os-window p-4" style="width:100%;max-width:480px">
+        <div class="flex justify-between items-center mb-2">
             <span class="exe-title" id="headerTitle">❤ Tôi Yêu Em !</span>
             <span id="clock" class="exe-title"></span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="flex flex-col gap-3">
-                <div class="flex flex-col items-center gap-3">
-                    <img src="https://scontent.fvii2-4.fna.fbcdn.net/v/t39.30808-6/641356478_919029251054275_2079000636574630761_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeEtnR-weGdbEmYe1x1I64pnm_uO57k1WSSb-47nuTVZJOJk-4ft-Q-EazyuU2Z_OZTTqbf_sM7o-8r6GtZGnvIl&_nc_ohc=hYUauS6YWOgQ7kNvwHYWylG&_nc_oc=Adn_UE5I__WBk6tZr8cxXMgQ03i5FUX1PSQLPyfn_7mfukYcIeQ_xCVR1eu-SKIKK08hu_u_H4Lg2TTaURNZnlBi&_nc_zt=23&_nc_ht=scontent.fvii2-4.fna&_nc_gid=Sf0J-chl-69G3XmIdQzipw&_nc_ss=8&oh=00_Afs36JUDT-DDHzduqwCz2jc5XRZG_5H6cJWLHe42EqpGAQ&oe=69A8F1B7" class="avatar float-anim" id="avatarImg" style="cursor:pointer; -webkit-user-select:none; user-select:none;" />
-                    <div class="name-box w-full" id="nameBox">MinhNhat</div>
+        <div class="grid grid-cols-2 gap-2">
+
+            <!-- ── Cột trái ── -->
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-col items-center gap-2">
+                    <img src="https://scontent.fvii2-4.fna.fbcdn.net/v/t39.30808-6/641356478_919029251054275_2079000636574630761_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeEtnR-weGdbEmYe1x1I64pnm_uO57k1WSSb-47nuTVZJOJk-4ft-Q-EazyuU2Z_OZTTqbf_sM7o-8r6GtZGnvIl&_nc_ohc=hYUauS6YWOgQ7kNvwHYWylG&_nc_oc=Adn_UE5I__WBk6tZr8cxXMgQ03i5FUX1PSQLPyfn_7mfukYcIeQ_xCVR1eu-SKIKK08hu_u_H4Lg2TTaURNZnlBi&_nc_zt=23&_nc_ht=scontent.fvii2-4.fna&_nc_gid=Sf0J-chl-69G3XmIdQzipw&_nc_ss=8&oh=00_Afs36JUDT-DDHzduqwCz2jc5XRZG_5H6cJWLHe42EqpGAQ&oe=69A8F1B7"
+                         class="avatar float-anim" id="avatarImg"
+                         style="cursor:pointer;-webkit-user-select:none;user-select:none;" />
+                    <div class="name-box" id="nameBox">MinhNhat</div>
                 </div>
-                <div class="pixel-card w-full">
-                    <h2 class="exe-title mb-2">STATS</h2>
-                    <ul class="text-sm space-y-1">
-                        <li>Tuổi: <strong>15</strong></li>
-                        <li>Status: <span class="status-online">Online</span></li>
-                        <li>From: Việt Nam 🇻🇳</li>
-                        <li>Mood: <span id="mood">Coding... 💻</span></li>
-                    </ul>
-                </div>
-                <div class="pixel-card w-full">
+
+                <!-- SOCIAL -->
+                <div class="pixel-card">
                     <h2 class="exe-title mb-2">SOCIAL</h2>
-                    <div class="flex gap-2 justify-center flex-wrap" id="socialBox">
-                        <a href="https://github.com/minhnhat2901/minhnhatt" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://www.facebook.com/ho.minh.nhat.138056?locale=vi_VN" class="social-link" target="_blank"><i class="fab fa-facebook"></i></a>
-                        <a href="https://www.instagram.com/_toiyeunangg/" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@_toiyeunang" class="social-link" target="_blank"><i class="fab fa-tiktok"></i></a>
-                        <a href="https://www.youtube.com/@nhathmn4744" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <div class="flex flex-col gap-1">
+                        <a href="https://github.com/minhnhat2901/minhnhatt" class="social-row" target="_blank">
+                            <div class="social-row-icon"><i class="fab fa-github"></i></div>
+                            <div>
+                                <div class="social-row-name">GitHub</div>
+                                <div class="social-row-sub">minhnhat2901</div>
+                            </div>
+                        </a>
+                        <a href="https://www.facebook.com/ho.minh.nhat.138056?locale=vi_VN" class="social-row" target="_blank">
+                            <div class="social-row-icon"><i class="fab fa-facebook"></i></div>
+                            <div>
+                                <div class="social-row-name">Facebook</div>
+                                <div class="social-row-sub">Hồ Minh Nhật</div>
+                            </div>
+                        </a>
+                        <a href="https://www.instagram.com/_toiyeunangg/" class="social-row" target="_blank">
+                            <div class="social-row-icon"><i class="fab fa-instagram"></i></div>
+                            <div>
+                                <div class="social-row-name">Instagram</div>
+                                <div class="social-row-sub">_toiyeunangg</div>
+                            </div>
+                        </a>
+                        <a href="https://www.tiktok.com/@_toiyeunang" class="social-row" target="_blank">
+                            <div class="social-row-icon"><i class="fab fa-tiktok"></i></div>
+                            <div>
+                                <div class="social-row-name">TikTok</div>
+                                <div class="social-row-sub">@_toiyeunang</div>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/@nhathmn4744" class="social-row" target="_blank">
+                            <div class="social-row-icon"><i class="fab fa-youtube"></i></div>
+                            <div>
+                                <div class="social-row-name">YouTube</div>
+                                <div class="social-row-sub">nhathmn4744</div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <div class="pixel-card w-full">
-                    <h2 class="exe-title mb-2"><i class="fas fa-music"></i> BGM</h2>
-                    <div class="flex items-center gap-2" id="musicControls">
-                        <button id="prevBtn" class="social-link"><i class="fas fa-backward"></i></button>
-                        <button id="playBtn" class="social-link"><i id="playIcon" class="fas fa-play"></i></button>
-                        <button id="nextBtn" class="social-link"><i class="fas fa-forward"></i></button>
-                    </div>
-                    <input type="range" id="volumeSlider" min="0" max="100" value="50" class="w-full mt-3 h-2 cursor-pointer" style="accent-color: var(--border);">
                 </div>
             </div>
 
-            <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-min">
-                <div class="md:col-span-2">
-                    <div class="pixel-card">
-                        <h2 class="exe-title mb-2">SỞ THÍCH</h2>
-                        <div class="flex gap-2 flex-wrap">
-                            <span class="tag">MUSIC</span><span class="tag">GAME</span>
-                            <span class="tag">CODE</span><span class="tag">AI</span><span class="tag">ANIME</span>
+            <!-- ── Cột phải ── -->
+            <div class="flex flex-col gap-2">
+
+                <!-- SỞ THÍCH -->
+                <div class="pixel-card">
+                    <h2 class="exe-title mb-2">SỞ THÍCH</h2>
+                    <div class="flex flex-col gap-1">
+                        <div class="hobby-tag-row">
+                            <span class="tag"><i class="fas fa-music" style="font-size:9px;margin-right:3px"></i>MUSIC</span>
+                            <span class="hobby-desc">Nghe nhạc mọi lúc</span>
+                        </div>
+                        <div class="hobby-tag-row">
+                            <span class="tag"><i class="fas fa-gamepad" style="font-size:9px;margin-right:3px"></i>GAME</span>
+                            <span class="hobby-desc">Hack cheat vô tư</span>
+                        </div>
+                        <div class="hobby-tag-row">
+                            <span class="tag"><i class="fas fa-code" style="font-size:9px;margin-right:3px"></i>CODE</span>
+                            <span class="hobby-desc">1% thôi... 😅</span>
+                        </div>
+                        <div class="hobby-tag-row">
+                            <span class="tag"><i class="fas fa-robot" style="font-size:9px;margin-right:3px"></i>AI</span>
+                            <span class="hobby-desc">Dùng AI làm mọi thứ</span>
+                        </div>
+                        <div class="hobby-tag-row">
+                            <span class="tag"><i class="fas fa-tv" style="font-size:9px;margin-right:3px"></i>ANIME</span>
+                            <span class="hobby-desc">Otaku chưa rõ lv</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="pixel-card">
-                    <h2 class="exe-title mb-3">YÊU THÍCH</h2>
-                    <div class="space-y-3 text-xs">
-                        <p>AI</p><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
-                        <p>Antigravity</p><div class="skill-bar"><div class="skill-fill" style="width:100%"></div></div>
-                        <p>Gaming</p><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-                    </div>
-                </div>
-                <div class="pixel-card">
-                    <h2 class="exe-title mb-3">KỸ NĂNG</h2>
-                    <div class="space-y-3 text-xs">
-                        <p>Music - 100%</p><div class="skill-bar"><div class="skill-fill" style="width:100%"></div></div>
-                        <p>Hack Game - 75%</p><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
-                        <p>Used AI - 80%</p><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
-                        <p>Code - 1%</p><div class="skill-bar"><div class="skill-fill" style="width:1%"></div></div>
-                    </div>
-                </div>
-
+                <!-- QUOTE -->
                 <div class="pixel-card flex flex-col justify-between">
                     <div>
-                        <h2 class="exe-title mb-4"><i class="fas fa-quote-left"></i> QUOTE</h2>
-                        <p id="quoteText" class="italic text-lg leading-relaxed">"1 kẻ văn vở thích làm thơ..."</p>
+                        <h2 class="exe-title mb-1"><i class="fas fa-quote-left"></i> QUOTE</h2>
+                        <p id="quoteText" class="italic text-xs leading-relaxed" style="color:#f0f0f0">"Kẻ mạnh không phải là kẻ chiến thắng người khác, mà là kẻ chiến thắng chính mình."</p>
                     </div>
-                    <p id="quoteAuthor" class="text-right text-xs opacity-70 mt-4" id="quoteAuthor">- MinhNhat</p>
+                    <p id="quoteAuthor" class="text-right text-xs mt-2" style="opacity:0.65;color:#fff">- Aristotle</p>
                 </div>
 
-                <div class="pixel-card">
-                    <h2 class="exe-title mb-3"><i class="fas fa-code"></i> PROJECTS</h2>
-                    <div class="space-y-3">
-                        <div class="p-2 border-2 border-black bg-white flex items-center gap-3">
-                            <i class="fas fa-robot"></i>
-                            <div class="flex-1 text-xs"><b>AI Bot</b><br><span class="opacity-70">Discord Bot AI</span></div>
-                            <span class="text-[10px] border px-1 border-green-500 text-green-500">Active</span>
-                        </div>
-                        <div class="p-2 border-2 border-black bg-white flex items-center gap-3">
-                            <i class="fas fa-gamepad"></i>
-                            <div class="flex-1 text-xs"><b>Game Hack</b><br><span class="opacity-70">Memory Manipulation</span></div>
-                            <span class="text-[10px] border px-1 border-orange-400 text-orange-400">WIP</span>
-                        </div>
-                        <div class="p-2 border-2 border-black bg-white flex items-center gap-3">
-                            <i class="fas fa-globe"></i>
-                            <div class="flex-1 text-xs"><b>Portfolio</b><br><span class="opacity-70">This website!</span></div>
-                            <span class="text-[10px] border px-1 border-purple-500 text-purple-500">Done</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="text-center mt-6 pt-4 border-t-2 border-current text-xs">
+        <div class="text-center mt-3 pt-2 divider text-xs" style="opacity:0.45;color:#fff">
             Made with ❤ by MinhNhat | © 2026
         </div>
     </div>
 
     <script>
-        // Clock & Theme (Gốc của bạn)
-        setInterval(() => { document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN"); }, 1000);
-        document.getElementById('themeToggle').onclick = () => {
-            document.body.classList.toggle('dark');
-            document.getElementById('themeToggle').innerHTML = document.body.classList.contains('dark') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        };
+        // Đồng hồ
+        setInterval(() => {
+            document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN");
+        }, 1000);
 
-        // Playlist & Audio (Gốc của bạn)
-        const audio = document.getElementById("bgmAudio");
-        const playlist = ["123.mp3", "song2.mp3", "song3.mp3"];
-        let currentIdx = 0;
-
-        function loadTrack(idx) {
-            audio.src = playlist[idx];
-            audio.play().then(() => { document.getElementById("playIcon").className = "fas fa-pause"; }).catch(() => {});
+        // Autoplay video khi người dùng chạm/click vào trang
+        const bgVideo = document.getElementById('bg-video');
+        function tryPlay() {
+            bgVideo.play().catch(() => {});
+            document.removeEventListener('click', tryPlay);
+            document.removeEventListener('touchstart', tryPlay);
         }
+        bgVideo.play().catch(() => {
+            document.addEventListener('click', tryPlay);
+            document.addEventListener('touchstart', tryPlay);
+        });
 
-        document.getElementById("playBtn").onclick = () => {
-            if(audio.paused) { audio.play(); document.getElementById("playIcon").className = "fas fa-pause"; }
-            else { audio.pause(); document.getElementById("playIcon").className = "fas fa-play"; }
-        };
-        document.getElementById("nextBtn").onclick = () => { currentIdx = (currentIdx + 1) % playlist.length; loadTrack(currentIdx); };
-        document.getElementById("prevBtn").onclick = () => { currentIdx = (currentIdx - 1 + playlist.length) % playlist.length; loadTrack(currentIdx); };
-        document.getElementById("volumeSlider").oninput = (e) => audio.volume = e.target.value / 100;
-        audio.onended = () => document.getElementById("nextBtn").click();
-        document.addEventListener("click", () => { if(!audio.src) loadTrack(0); }, {once: true});
-
-
-       // ===== Quotes Rotation =====
+        // Quotes
         const quotes = [
-            { text: '"Đừng bao giờ làm miễn phí khi bạn thực sự giỏi một điều gì đó."', author: '- Joker' },
-            { text: '"Đừng sống trong quá khứ, đừng mơ về tương lai, hãy tập trung tâm trí vào giây phút hiện tại."', author: '- Phật Giáo' },
-            { text: '"Yêu tôi hay ghét tôi, cả hai đều có lợi cho tôi. Nếu bạn yêu tôi, tôi sẽ luôn ở trong tim bạn và nếu bạn ghét tôi, tôi sẽ ở trong tâm trí bạn."', author: '- Baland Quandeel' },
-            { text: '"Cuộc sống vốn không bằng. Hãy tập quen dần với điều đó."', author: '- Bill Gates' },
-            { text: '"Đừng sống cùng một năm đến 75 lần và gọi đó là cuộc đời"', author: '- Robin Sharma' },
-            { text: '"Cái tôi và sự hiểu biết tỷ lệ nghịch với nhau. Hiểu biết càng nhiều, cái tôi càng bé. Hiểu biết càng ít, cái tôi càng to."', author: '- Albert Einstein' }
+            { text: '"Kẻ mạnh không phải là kẻ chiến thắng người khác, mà là kẻ chiến thắng chính mình."', author: '- Aristotle' },
+            { text: '"Đừng bao giờ giải thích bản thân. Người yêu bạn không cần, kẻ ghét bạn không tin."', author: '- Ali ibn Abi Talib' },
+            { text: '"Bạn không thể quay lại và thay đổi điểm khởi đầu, nhưng bạn có thể bắt đầu từ nơi bạn đang đứng và thay đổi điểm kết thúc."', author: '- C.S. Lewis' },
+            { text: '"Thế giới đủ lớn để thỏa mãn nhu cầu của mọi người, nhưng không đủ để thỏa mãn lòng tham của bất kỳ ai."', author: '- Gandhi' },
+            { text: '"Nếu bạn muốn đi nhanh, hãy đi một mình. Nếu bạn muốn đi xa, hãy đi cùng nhau."', author: '- Tục ngữ Châu Phi' },
+            { text: '"Sự im lặng là câu trả lời hay nhất dành cho kẻ ngốc."', author: '- Imam Ali' },
+            { text: '"Đừng lo lắng về việc thất bại. Lo lắng về những cơ hội bạn bỏ lỡ khi bạn không dám thử."', author: '- Jack Canfield' },
+            { text: '"Người ta thường hối tiếc những điều họ không làm hơn là những điều họ đã làm."', author: '- Mark Twain' },
+            { text: '"Một ngày nào đó tất cả sẽ có lý giải. Một ngày nào đó tất cả những mảnh ghép sẽ khớp với nhau."', author: '- Unknown' },
+            { text: '"Đừng sống để người khác hài lòng. Hãy sống để khi nhìn lại, bạn tự hào về chính mình."', author: '- Unknown' },
+            { text: '"Kỷ luật là cầu nối giữa mục tiêu và thành tích."', author: '- Jim Rohn' },
+            { text: '"Cuộc đời này không có phép thử nháp. Mỗi ngày trôi qua là một trang không thể viết lại."', author: '- Unknown' }
         ];
         let currentQuote = 0;
         setInterval(() => {
-            currentQuote = (currentQuote + 1) % quotes.length;
-            document.getElementById('quoteText').textContent = quotes[currentQuote].text;
-            document.getElementById('quoteAuthor').textContent = quotes[currentQuote].author;
-        }, 8000);
+            const qt = document.getElementById('quoteText');
+            const qa = document.getElementById('quoteAuthor');
+            qt.style.opacity = '0'; qa.style.opacity = '0';
+            setTimeout(() => {
+                currentQuote = (currentQuote + 1) % quotes.length;
+                qt.textContent = quotes[currentQuote].text;
+                qa.textContent = quotes[currentQuote].author;
+                qt.style.opacity = '1'; qa.style.opacity = '0.65';
+            }, 600);
+        }, 7000);
 
-        // Easter Egg ẩn - bàn phím máy tính (Gốc của bạn)
+        // Easter Egg - bàn phím
         let _k = '';
         document.addEventListener('keydown', (e) => {
             _k += e.key.toLowerCase();
@@ -198,33 +411,22 @@
             }
         });
 
-        // Easter Egg ẩn - nhấn giữ avatar 1.5 giây (hoạt động trên điện thoại)
+        // Easter Egg - giữ avatar
         let pressTimer = null;
         const avatar = document.getElementById('avatarImg');
-
         function triggerEasterEgg() {
             document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
             document.getElementById('headerTitle').style.color = '#ff6b9d';
         }
-
-        // Touch (điện thoại)
-        avatar.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            pressTimer = setTimeout(triggerEasterEgg, 1500);
-        }, { passive: false });
+        avatar.addEventListener('touchstart', (e) => { e.preventDefault(); pressTimer = setTimeout(triggerEasterEgg, 1500); }, { passive: false });
         avatar.addEventListener('touchend', () => clearTimeout(pressTimer));
         avatar.addEventListener('touchmove', () => clearTimeout(pressTimer));
-
-        // Mouse (máy tính - giữ chuột)
-        avatar.addEventListener('mousedown', () => {
-            pressTimer = setTimeout(triggerEasterEgg, 1500);
-        });
+        avatar.addEventListener('mousedown', () => { pressTimer = setTimeout(triggerEasterEgg, 1500); });
         avatar.addEventListener('mouseup', () => clearTimeout(pressTimer));
         avatar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
 
-        // Easter Egg ẩn - nhấn tên "MinhNhat" 5 lần (hoạt động trên điện thoại)
-        let tapCount = 0;
-        let tapTimer = null;
+        // Easter Egg - nhấn tên 5 lần
+        let tapCount = 0, tapTimer = null;
         document.getElementById('nameBox').addEventListener('click', () => {
             tapCount++;
             clearTimeout(tapTimer);

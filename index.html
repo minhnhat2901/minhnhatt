@@ -177,8 +177,6 @@
         .float-anim { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
 
-        #quoteText, #quoteAuthor { transition: opacity 0.6s ease; }
-
         /* Scrollbar */
         .social-row {
             display: flex;
@@ -291,23 +289,7 @@
             font-family: "Roboto Mono", monospace;
         }
 
-        /* ── Nút loa nhỏ góc phải ── */
-        #soundBtn {
-            position: fixed;
-            bottom: 16px; right: 16px;
-            z-index: 10;
-            width: 34px; height: 34px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.30);
-            border: 1px solid rgba(255,255,255,0.20);
-            border-radius: 50%;
-            color: #fff; font-size: 13px;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            transition: background 0.2s;
-        }
-        #soundBtn:hover { background: rgba(0,0,0,0.50); }
+
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
@@ -333,10 +315,7 @@
         </div>
     </div>
 
-    <!-- Nút loa nhỏ góc phải để toggle -->
-    <button id="soundBtn" title="Bật/tắt âm thanh" style="display:none">
-        <i id="soundIcon" class="fas fa-volume-up"></i>
-    </button>
+
 
     <div class="os-window p-4" style="width:100%;max-width:480px">
         <div class="flex justify-between items-center mb-2">
@@ -454,8 +433,6 @@
         // Video + popup âm thanh
         const bgVideo = document.getElementById('bg-video');
         const soundPrompt = document.getElementById('soundPrompt');
-        const soundBtn = document.getElementById('soundBtn');
-        const soundIcon = document.getElementById('soundIcon');
 
         function dismissPrompt(withSound) {
             soundPrompt.style.opacity = '0';
@@ -464,22 +441,11 @@
                 soundPrompt.style.display = 'none';
                 soundPrompt.dataset.closed = 'true';
             }, 300);
-            soundBtn.style.display = 'flex';
-            if (withSound) {
-                bgVideo.muted = false;
-                soundIcon.className = 'fas fa-volume-up';
-            } else {
-                soundIcon.className = 'fas fa-volume-mute';
-            }
+            if (withSound) bgVideo.muted = false;
         }
 
         document.getElementById('btnYesSound').addEventListener('click', () => dismissPrompt(true));
         document.getElementById('btnNoSound').addEventListener('click', () => dismissPrompt(false));
-
-        soundBtn.addEventListener('click', () => {
-            bgVideo.muted = !bgVideo.muted;
-            soundIcon.className = bgVideo.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-        });
 
         // Quotes
         const quotes = [
@@ -497,16 +463,21 @@
             { text: '"Cuộc đời này không có phép thử nháp. Mỗi ngày trôi qua là một trang không thể viết lại."', author: '- Unknown' }
         ];
         let currentQuote = 0;
+        const qt = document.getElementById('quoteText');
+        const qa = document.getElementById('quoteAuthor');
+        qt.style.transition = 'opacity 0.5s ease';
+        qa.style.transition = 'opacity 0.5s ease';
+
         setInterval(() => {
-            const qt = document.getElementById('quoteText');
-            const qa = document.getElementById('quoteAuthor');
-            qt.style.opacity = '0'; qa.style.opacity = '0';
+            qt.style.opacity = '0';
+            qa.style.opacity = '0';
             setTimeout(() => {
                 currentQuote = (currentQuote + 1) % quotes.length;
                 qt.textContent = quotes[currentQuote].text;
                 qa.textContent = quotes[currentQuote].author;
-                qt.style.opacity = '1'; qa.style.opacity = '0.65';
-            }, 600);
+                qt.style.opacity = '1';
+                qa.style.opacity = '0.65';
+            }, 500);
         }, 7000);
 
         // Easter Egg - bàn phím

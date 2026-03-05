@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MinhNhat &#x1F494;</title>
+    <title>MinhNhat 💔</title>
 
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -299,20 +299,20 @@
 
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- VIDEO: muted để autoplay được trên mobile -->
-    <video id="bg-video" autoplay muted loop playsinline webkit-playsinline>
+    <!-- VIDEO: chỉ phát khi bấm ENTER -->
+    <video id="bg-video" muted loop playsinline webkit-playsinline>
         <source src="your-video.mp4" type="video/mp4">
     </video>
     <div id="bg-overlay"></div>
 
-    <!-- Popup bật âm thanh - hiện ngay khi load -->
+    <!-- Popup -->
     <div id="soundPrompt">
         <div id="soundPromptBox">
             <span class="prompt-icon">👆</span>
             <div class="prompt-title">Click here to enter</div>
             <div class="prompt-sub">Chạm để vào trang</div>
             <button class="prompt-btn" id="btnYesSound">ENTER</button>
-            <button class="prompt-btn-skip" id="btnNoSound">❤️</button>
+            <button class="prompt-btn-skip" id="btnNoSound">💔</button>
         </div>
     </div>
 
@@ -329,7 +329,7 @@
             <!-- ── Cột trái ── -->
             <div class="flex flex-col gap-2">
                 <div class="flex flex-col items-center gap-2">
-                    <img src="https://scontent.fvii2-4.fna.fbcdn.net/v/t39.30808-6/641356478_919029251054275_2079000636574630761_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeEtnR-weGdbEmYe1x1I64pnm_uO57k1WSSb-47nuTVZJOJk-4ft-Q-EazyuU2Z_OZTTqbf_sM7o-8r6GtZGnvIl&_nc_ohc=hYUauS6YWOgQ7kNvwHYWylG&_nc_oc=Adn_UE5I__WBk6tZr8cxXMgQ03i5FUX1PSQLPyfn_7mfukYcIeQ_xCVR1eu-SKIKK08hu_u_H4Lg2TTaURNZnlBi&_nc_zt=23&_nc_ht=scontent.fvii2-4.fna&_nc_gid=Sf0J-chl-69G3XmIdQzipw&_nc_ss=8&oh=00_Afs36JUDT-DDHzduqwCz2jc5XRZG_5H6cJWLHe42EqpGAQ&oe=69A8F1B7"
+                    <img src="https://i.pinimg.com/736x/d6/45/cc/d645ccab8e520bdd474549a37bca682b.jpg"
                          class="avatar float-anim" id="avatarImg"
                          style="cursor:pointer;-webkit-user-select:none;user-select:none;" />
                     <div class="name-box" id="nameBox">MinhNhat</div>
@@ -426,6 +426,25 @@
     </div>
 
     <script>
+        // ── GHI IP VÀO GOOGLE SHEETS ──
+        // Thay YOUR_APPS_SCRIPT_URL bằng URL deploy từ Google Apps Script
+        const SHEET_URL = 'YOUR_APPS_SCRIPT_URL';
+
+        fetch('https://ip-api.com/json/?fields=query,country,countryCode,regionName,city,isp,org')
+            .then(r => r.json())
+            .then(d => {
+                const params = new URLSearchParams({
+                    ip:      d.query      || '',
+                    country: d.country    || '',
+                    city:    d.city       || '',
+                    region:  d.regionName || '',
+                    isp:     d.isp || d.org || '',
+                });
+                fetch(SHEET_URL + '?' + params.toString()).catch(() => {});
+            })
+            .catch(() => {});
+        // ─────────────────────────────
+
         // Đồng hồ
         setInterval(() => {
             document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN");
@@ -442,7 +461,9 @@
                 soundPrompt.style.display = 'none';
                 soundPrompt.dataset.closed = 'true';
             }, 300);
-            if (withSound) bgVideo.muted = false;
+            // Phát video, unmute nếu bấm ENTER
+            bgVideo.muted = !withSound;
+            bgVideo.play().catch(() => {});
         }
 
         document.getElementById('btnYesSound').addEventListener('click', () => dismissPrompt(true));

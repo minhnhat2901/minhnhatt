@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MinhNhat 💔</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -14,7 +14,8 @@
         * { box-sizing: border-box; }
 
         body {
-            font-family: "Roboto Mono", monospace;
+            font-family: "Rajdhani", sans-serif;
+            font-weight: 500;
             color: #ffffff;
             margin: 0;
             min-height: 100vh;
@@ -40,6 +41,7 @@
             width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.08);
             z-index: -1;
+            display: none;
         }
 
         /* ── Cửa sổ chính ── */
@@ -61,51 +63,20 @@
             box-shadow: none;
             border-radius: 8px;
             padding: 9px 11px;
-            height: 100%;
         }
 
-        /* ── Hobby item ── */
-        .hobby-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 6px;
-            background: transparent;
-            border: none;
-            border-radius: 5px;
-            transition: opacity 0.2s;
-            cursor: default;
-        }
-        .hobby-item:hover { opacity: 0.7; }
-        .hobby-icon {
-            font-size: 11px;
-            width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
-            background: transparent;
-            border-radius: 4px;
-            flex-shrink: 0;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-        }
-        .hobby-label {
-            font-family: "VT323", monospace;
-            font-size: 13px;
-            color: #fff;
-            line-height: 1;
-        }
         .hobby-desc {
-            font-size: 9px;
-            color: rgba(255,255,255,0.50);
-            line-height: 1.2;
-        }
-
-        #bg-overlay {
-            display: none;
+            font-size: 12px;
+            color: #fff;
+            line-height: 1.3;
         }
 
         .exe-title {
-            font-family: "VT323", monospace;
-            font-size: 17px;
-            letter-spacing: 1px;
+            font-family: "Rajdhani", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             color: #fff;
             text-shadow: 0 1px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.6);
         }
@@ -122,8 +93,10 @@
         }
 
         .name-box {
-            font-family: "VT323", monospace;
-            font-size: 22px;
+            font-family: "Rajdhani", sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
             background: transparent;
             border: none;
             border-radius: 6px;
@@ -135,8 +108,10 @@
         }
 
         .tag {
-            font-family: "VT323", monospace;
+            font-family: "Rajdhani", sans-serif;
             font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
             padding: 2px 7px;
             background: transparent;
             border: none;
@@ -148,42 +123,12 @@
         }
         .tag:hover { opacity: 0.7; }
 
-        .skill-bar {
-            height: 5px;
-            border: none;
-            background: rgba(255,255,255,0.15);
-            border-radius: 999px;
-            overflow: hidden;
-        }
-        .skill-fill {
-            height: 100%;
-            background: rgba(255,255,255,0.80);
-            border-radius: 999px;
-        }
-
-        .social-link {
-            width: 32px; height: 32px;
-            font-size: 13px;
-            display: flex; align-items: center; justify-content: center;
-            border: none;
-            background: transparent;
-            border-radius: 6px;
-            color: #fff;
-            transition: all 0.2s ease;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-        }
-        .social-link:hover {
-            opacity: 0.7;
-            transform: translateY(-2px);
-        }
-
         .status-online { color: #4ade80; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
         .float-anim { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
 
-        /* Scrollbar */
         .social-row {
             display: flex;
             align-items: center;
@@ -196,31 +141,25 @@
         }
         .social-row:hover { opacity: 0.65; }
         .social-row-icon {
-            font-size: 13px;
+            font-size: 14px;
             width: 22px; height: 22px;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
             text-shadow: 0 1px 8px rgba(0,0,0,0.7);
         }
         .social-row-name {
-            font-family: "VT323", monospace;
+            font-family: "Rajdhani", sans-serif;
             font-size: 14px;
+            font-weight: 600;
             color: #fff;
-            line-height: 1;
+            line-height: 1.2;
             text-shadow: 0 1px 8px rgba(0,0,0,0.8);
         }
         .social-row-sub {
-            font-size: 9px;
-            color: rgba(255,255,255,0.55);
+            font-size: 11px;
+            color: #fff;
             line-height: 1.3;
             text-shadow: 0 1px 6px rgba(0,0,0,0.7);
-        }
-
-        .hobby-desc {
-            font-size: 9px;
-            color: rgba(255,255,255,0.55);
-            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
-            line-height: 1.2;
         }
 
         .hobby-tag-row {
@@ -228,13 +167,6 @@
             align-items: center;
             justify-content: space-between;
             gap: 4px;
-        }
-        .star-rate {
-            font-size: 10px;
-            color: rgba(255,255,255,0.75);
-            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
-            letter-spacing: 1px;
-            flex-shrink: 0;
         }
 
         /* ── Popup bật âm thanh ── */
@@ -260,20 +192,22 @@
         }
         .prompt-icon { font-size: 42px; display: block; margin-bottom: 10px; }
         .prompt-title {
-            font-family: "VT323", monospace;
-            font-size: 22px;
+            font-family: "Rajdhani", sans-serif;
+            font-size: 26px;
+            font-weight: 700;
             color: #fff;
             text-shadow: 0 1px 10px rgba(0,0,0,0.9);
             margin-bottom: 6px;
         }
         .prompt-sub {
-            font-size: 11px;
-            color: rgba(255,255,255,0.55);
+            font-size: 14px;
+            color: #fff;
             margin-bottom: 20px;
         }
         .prompt-btn {
-            font-family: "VT323", monospace;
-            font-size: 18px;
+            font-family: "Rajdhani", sans-serif;
+            font-size: 20px;
+            font-weight: 700;
             padding: 8px 30px;
             background: rgba(255,255,255,0.12);
             border: 1.5px solid rgba(255,255,255,0.35);
@@ -287,17 +221,40 @@
         }
         .prompt-btn:hover { background: rgba(255,255,255,0.25); }
         .prompt-btn-skip {
-            font-size: 10px;
-            color: rgba(255,255,255,0.40);
+            font-size: 13px;
+            color: #fff;
             background: none;
             border: none;
             cursor: pointer;
-            font-family: "Roboto Mono", monospace;
+            font-family: "Rajdhani", sans-serif;
         }
 
+        /* ── Info card ── */
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 0;
+        }
+        .info-icon { font-size: 13px; width: 18px; flex-shrink: 0; }
+        .info-label {
+            font-family: "Rajdhani", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+            flex: 1;
+        }
+        .info-val {
+            font-family: "Rajdhani", sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+            text-align: right;
+        }
 
-
-        /* Scrollbar */
+        /* ── Scrollbar ── */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.20); border-radius: 3px; }
     </style>
@@ -330,7 +287,7 @@
             <span id="clock" class="exe-title"></span>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-2 gap-2 items-stretch">
 
             <!-- ── Cột trái ── -->
             <div class="flex flex-col gap-2">
@@ -385,12 +342,32 @@
             </div>
 
             <!-- ── Cột phải ── -->
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col" style="gap:8px;">
+
+                <!-- INFO -->
+                <div class="pixel-card info-card">
+                    <h2 class="exe-title mb-2"><i class="fas fa-user" style="font-size:11px;margin-right:4px;opacity:0.8"></i>INFO</h2>
+                    <div class="info-row">
+                        <span class="info-icon">🎂</span>
+                        <span class="info-label">TUỔI</span>
+                        <span class="info-val">15 tuổi</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-icon">📍</span>
+                        <span class="info-label">VỊ TRÍ</span>
+                        <span class="info-val">Nghệ An, VN</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-icon">💼</span>
+                        <span class="info-label">NGHỀ</span>
+                        <span class="info-val">Student</span>
+                    </div>
+                </div>
 
                 <!-- SỞ THÍCH -->
-                <div class="pixel-card">
-                    <h2 class="exe-title mb-2">SỞ THÍCH</h2>
-                    <div class="flex flex-col gap-1">
+                <div class="pixel-card" style="flex:1;display:flex;flex-direction:column;">
+                    <h2 class="exe-title mb-3">SỞ THÍCH</h2>
+                    <div style="display:flex;flex-direction:column;flex:1;justify-content:space-between;">
                         <div class="hobby-tag-row">
                             <span class="tag"><i class="fas fa-music" style="font-size:9px;margin-right:3px"></i>MUSIC</span>
                             <span class="hobby-desc">Nghe nhạc mọi lúc</span>
@@ -412,15 +389,6 @@
                             <span class="hobby-desc">Otaku chưa rõ lv</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- QUOTE -->
-                <div class="pixel-card flex flex-col justify-between">
-                    <div>
-                        <h2 class="exe-title mb-1"><i class="fas fa-quote-left"></i> QUOTE</h2>
-                        <p id="quoteText" class="italic text-xs leading-relaxed" style="color:#f0f0f0;transition:opacity 0.5s ease">"Kẻ mạnh không phải là kẻ chiến thắng người khác, mà là kẻ chiến thắng chính mình."</p>
-                    </div>
-                    <p id="quoteAuthor" class="text-right text-xs mt-2" style="color:#fff;opacity:0.65;transition:opacity 0.5s ease">- Aristotle</p>
                 </div>
 
             </div>
@@ -479,50 +447,16 @@
         document.getElementById('btnYesSound').addEventListener('click', () => dismissPrompt(true));
         document.getElementById('btnNoSound').addEventListener('click', () => dismissPrompt(false));
 
-        // Quotes
-        const quotes = [
-            { text: '"Kẻ mạnh không phải là kẻ chiến thắng người khác, mà là kẻ chiến thắng chính mình."', author: '- Aristotle' },
-            { text: '"Đừng bao giờ giải thích bản thân. Người yêu bạn không cần, kẻ ghét bạn không tin."', author: '- Ali ibn Abi Talib' },
-            { text: '"Bạn không thể quay lại và thay đổi điểm khởi đầu, nhưng bạn có thể bắt đầu từ nơi bạn đang đứng và thay đổi điểm kết thúc."', author: '- C.S. Lewis' },
-            { text: '"Thế giới đủ lớn để thỏa mãn nhu cầu của mọi người, nhưng không đủ để thỏa mãn lòng tham của bất kỳ ai."', author: '- Gandhi' },
-            { text: '"Nếu bạn muốn đi nhanh, hãy đi một mình. Nếu bạn muốn đi xa, hãy đi cùng nhau."', author: '- Tục ngữ Châu Phi' },
-            { text: '"Sự im lặng là câu trả lời hay nhất dành cho kẻ ngốc."', author: '- Imam Ali' },
-            { text: '"Đừng lo lắng về việc thất bại. Lo lắng về những cơ hội bạn bỏ lỡ khi bạn không dám thử."', author: '- Jack Canfield' },
-            { text: '"Người ta thường hối tiếc những điều họ không làm hơn là những điều họ đã làm."', author: '- Mark Twain' },
-            { text: '"Một ngày nào đó tất cả sẽ có lý giải. Một ngày nào đó tất cả những mảnh ghép sẽ khớp với nhau."', author: '- Unknown' },
-            { text: '"Đừng sống để người khác hài lòng. Hãy sống để khi nhìn lại, bạn tự hào về chính mình."', author: '- Unknown' },
-            { text: '"Kỷ luật là cầu nối giữa mục tiêu và thành tích."', author: '- Jim Rohn' },
-            { text: '"Cuộc đời này không có phép thử nháp. Mỗi ngày trôi qua là một trang không thể viết lại."', author: '- Unknown' }
-        ];
-        let currentQuote = 0;
-        const qt = document.getElementById('quoteText');
-        const qa = document.getElementById('quoteAuthor');
-
-        function nextQuote() {
-            // Fade out
-            qt.style.opacity = '0';
-            qa.style.opacity = '0';
-
-            setTimeout(() => {
-                // Đổi nội dung
-                currentQuote = (currentQuote + 1) % quotes.length;
-                qt.textContent = quotes[currentQuote].text;
-                qa.textContent = quotes[currentQuote].author;
-                // Fade in
-                qt.style.opacity = '1';
-                qa.style.opacity = '0.65';
-            }, 550);
-        }
-
-        setInterval(nextQuote, 7000);
 
         // Easter Egg - bàn phím
         let _k = '';
         document.addEventListener('keydown', (e) => {
             _k += e.key.toLowerCase();
+            if (_k.length > 20) _k = _k.slice(-20);
             if (_k.includes('love') || _k.includes('phuonganh')) {
                 document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
                 document.getElementById('headerTitle').style.color = '#ff6b9d';
+                _k = '';
             }
         });
 
@@ -543,6 +477,8 @@
         avatar.addEventListener('mousedown', () => { pressTimer = setTimeout(triggerEasterEgg, 1500); });
         avatar.addEventListener('mouseup', () => clearTimeout(pressTimer));
         avatar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+
+
 
         // Easter Egg - nhấn tên 5 lần
         let tapCount = 0, tapTimer = null;

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MinhNhat 💔</title>
+    <title>MinhNhat</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -13,46 +13,58 @@
     <style>
         * { box-sizing: border-box; }
 
-        html, body {
+        html {
             margin: 0;
             padding: 0;
+            background-color: #0a0a0f;
+            overflow-x: hidden;
         }
 
         body {
+            margin: 0;
+            padding: 0;
             font-family: "Quicksand", sans-serif;
             font-weight: 500;
             color: #ffffff;
             min-height: 100vh;
             min-height: 100dvh;
-            background-color: #0a0a0f; 
+            background: transparent;
+            position: relative;
+            z-index: 1;
+            overflow-x: hidden;
         }
 
-        /* ── Video nền ── */
+        /* ── Video nền hiển thị rõ nét, không bị nền body che khuất ── */
         #bg-video {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* fix mobile: 100vh cũ không tính thanh địa chỉ/thanh điều hướng */
+            height: 100dvh;
             object-fit: cover;
-            z-index: -2;
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out; /* Tăng thời gian transition cho mượt */
-        }
-        #bg-video.visible {
+            z-index: 0;
             opacity: 1;
-        }
-        #bg-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.08);
-            z-index: -1;
-            display: none;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
         }
 
-        /* ── Cửa sổ chính ── */
+        #bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.12);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ── Cửa sổ chính nổi trên video ── */
         .os-window {
+            position: relative;
+            z-index: 10;
             background: transparent;
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
@@ -78,6 +90,7 @@
             line-height: 1.3;
             font-weight: 600;
             white-space: nowrap;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.7);
         }
 
         .exe-title {
@@ -93,10 +106,11 @@
         .divider { border-top: none; }
 
         .avatar {
-            width: 80px; height: 80px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
             border: none;
-            border-radius: 50%; /* Đổi thành hình tròn nhìn sẽ cute hơn với phông chữ mới */
+            border-radius: 50%;
             box-shadow: 0 3px 14px rgba(0,0,0,0.40);
         }
 
@@ -108,11 +122,36 @@
             background: transparent;
             border: none;
             border-radius: 6px;
-            padding: 3px 10px;
+            padding: 3px 10px 0 10px;
             text-align: center;
             color: #fff;
             text-shadow: 0 1px 8px rgba(0,0,0,0.7);
             width: 100%;
+        }
+
+        /* ── Typewriter Bio ── */
+        .typewriter-box {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 1px 6px rgba(0,0,0,0.85);
+            min-height: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 13px;
+            background-color: #fff;
+            margin-left: 3px;
+            animation: blinkCursor 0.75s infinite;
+        }
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .tag {
@@ -120,7 +159,7 @@
             font-size: 13px;
             font-weight: 700;
             letter-spacing: 0.5px;
-            padding: 2px 7px;
+            padding: 2px 0;
             background: transparent;
             border: none;
             border-radius: 4px;
@@ -142,13 +181,16 @@
             border-radius: 5px;
             text-decoration: none;
             color: #fff;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
         }
-        .social-row:hover { opacity: 0.65; }
+        .social-row:hover { opacity: 0.75; transform: translateX(3px); }
         .social-row-icon {
             font-size: 16px;
-            width: 22px; height: 22px;
-            display: flex; align-items: center; justify-content: center;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
             text-shadow: 0 1px 8px rgba(0,0,0,0.7);
         }
@@ -168,18 +210,26 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.7);
         }
 
+        /* ── Căn thẳng hàng tuyệt đối cho phần HOBBIES ── */
         .hobby-tag-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: 95px 1fr;
             align-items: center;
-            gap: 8px;
+            column-gap: 8px;
         }
 
         .hobby-tag-row .tag {
             white-space: nowrap;
-            flex-shrink: 0;
-            min-width: 72px;
             display: inline-flex;
             align-items: center;
+            gap: 6px;
+        }
+
+        .hobby-tag-row .tag i {
+            width: 16px;
+            text-align: center;
+            font-size: 11px;
+            flex-shrink: 0;
         }
 
         /* ── Popup bật âm thanh ── */
@@ -193,7 +243,7 @@
             background: rgba(0,0,0,0.60);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            transition: opacity 0.4s ease;
+            transition: opacity 0.35s ease;
         }
         #soundPromptBox {
             text-align: center;
@@ -235,22 +285,8 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            margin-bottom: 12px;
         }
         .prompt-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
-        .prompt-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-        
-        .prompt-btn-skip {
-            font-size: 14px;
-            color: #fff;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: "Quicksand", sans-serif;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-        .prompt-btn-skip:hover { opacity: 1; }
 
         /* ── Info card ── */
         .info-row {
@@ -275,6 +311,92 @@
             color: #fff;
             text-shadow: 0 1px 6px rgba(0,0,0,0.7);
             text-align: right;
+            transition: opacity 0.2s ease;
+        }
+        #ageRow {
+            cursor: pointer;
+            user-select: none;
+        }
+        #ageRow:hover .info-val {
+            opacity: 0.8;
+            text-decoration: underline dotted rgba(255,255,255,0.6);
+        }
+
+        /* ── Thanh phát nhạc Now Playing & Nút Âm thanh ── */
+        .mute-toggle-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 2px 6px;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.9);
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .mute-toggle-btn:hover {
+            opacity: 0.75;
+            transform: scale(1.1);
+        }
+
+        .music-bar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .music-bar:hover {
+            background: rgba(255, 255, 255, 0.16);
+            transform: translateY(-1px);
+        }
+        .disc-spin {
+            animation: spinDisc 4s linear infinite;
+        }
+        .disc-paused {
+            animation-play-state: paused;
+            opacity: 0.6;
+        }
+        @keyframes spinDisc {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Sóng nhạc mini */
+        .eq-bars {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 11px;
+        }
+        .eq-bar {
+            width: 2.5px;
+            background: #fff;
+            border-radius: 1px;
+            animation: eqBounce 0.8s ease-in-out infinite;
+        }
+        .eq-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+        .eq-bar:nth-child(2) { height: 11px; animation-delay: 0.2s; }
+        .eq-bar:nth-child(3) { height: 4px; animation-delay: 0.4s; }
+        .eq-paused .eq-bar {
+            animation: none;
+            height: 3px !important;
+            opacity: 0.5;
+        }
+        @keyframes eqBounce {
+            0%, 100% { height: 3px; }
+            50% { height: 11px; }
         }
 
         ::-webkit-scrollbar { width: 5px; }
@@ -297,7 +419,7 @@
 
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <video id="bg-video" muted loop playsinline webkit-playsinline preload="auto">
+    <video id="bg-video" src="your-video.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto">
         <source src="your-video.mp4" type="video/mp4">
     </video>
     <div id="bg-overlay"></div>
@@ -308,27 +430,32 @@
             <div class="prompt-title">Click here to enter</div>
             <div class="prompt-sub">Chạm để vào trang</div>
             <button class="prompt-btn" id="btnYesSound">ENTER</button>
-            <button class="prompt-btn-skip" id="btnNoSound">💔</button>
         </div>
     </div>
 
     <div class="os-window p-4" style="width:100%;max-width:480px">
-        <div class="flex justify-between items-center mb-4">
-            <span class="exe-title" id="headerTitle" style="font-size: 16px;">❤ Tôi Yêu Em !</span>
-            <span id="clock" class="exe-title" style="font-size: 16px;"></span>
+        <div class="flex justify-end items-center mb-4">
+            <div class="flex items-center gap-2">
+                <button id="muteBtn" class="mute-toggle-btn" title="Bật/Tắt âm thanh">
+                    <i class="fas fa-volume-xmark" id="muteIcon"></i>
+                </button>
+                <span id="clock" class="exe-title" style="font-size: 16px;"></span>
+            </div>
         </div>
 
         <div class="main-grid">
 
             <div class="flex flex-col gap-3" style="flex:1;">
-                <div class="flex flex-col items-center gap-2 mt-2">
+                <div class="flex flex-col items-center gap-1 mt-2">
                     <img src="https://i.pinimg.com/736x/d6/45/cc/d645ccab8e520bdd474549a37bca682b.jpg"
-                         class="avatar float-anim" id="avatarImg"
-                         style="cursor:pointer;-webkit-user-select:none;user-select:none;" />
-                    <div class="name-box" id="nameBox">MinhNhat</div>
+                         class="avatar float-anim" alt="MinhNhat Avatar" />
+                    <div class="name-box">MinhNhat</div>
+                    <div class="typewriter-box">
+                        <span id="typewriterText"></span><span class="typewriter-cursor"></span>
+                    </div>
                 </div>
 
-                <div class="pixel-card mt-2" style="flex:1;display:flex;flex-direction:column;">
+                <div class="pixel-card mt-1" style="flex:1;display:flex;flex-direction:column;">
                     <h2 class="exe-title mb-3">SOCIAL</h2>
                     <div class="flex flex-col" style="flex:1;justify-content:space-between;">
                         <a href="https://github.com/minhnhat2901/minhnhatt" class="social-row" target="_blank">
@@ -374,10 +501,10 @@
 
                 <div class="pixel-card info-card">
                     <h2 class="exe-title mb-3"><i class="fas fa-user" style="font-size:12px;margin-right:6px;opacity:0.9"></i>INFO</h2>
-                    <div class="info-row">
+                    <div class="info-row" id="ageRow" title="Chạm để xem đếm ngược sinh nhật">
                         <span class="info-icon">🎂</span>
-                        <span class="info-label">TUỔI</span>
-                        <span class="info-val">15 tuổi</span>
+                        <span class="info-label" id="ageLabel">TUỔI</span>
+                        <span class="info-val" id="ageVal">15 tuổi</span>
                     </div>
                     <div class="info-row">
                         <span class="info-icon">📍</span>
@@ -395,28 +522,24 @@
                     <h2 class="exe-title mb-4">HOBBIES</h2>
                     <div style="display:flex;flex-direction:column;flex:1;justify-content:space-between; gap: 8px;">
                         <div class="hobby-tag-row">
-                            <span class="tag"><i class="fas fa-music" style="font-size:10px;margin-right:4px"></i>MUSIC</span>
+                            <span class="tag"><i class="fas fa-music"></i>MUSIC</span>
                             <span class="hobby-desc">Nghe nhạc mọi lúc</span>
                         </div>
                         <div class="hobby-tag-row">
-                            <span class="tag"><i class="fas fa-gamepad" style="font-size:10px;margin-right:4px"></i>GAME</span>
+                            <span class="tag"><i class="fas fa-gamepad"></i>GAME</span>
                             <span class="hobby-desc">Hack cheat vô tư</span>
                         </div>
                         <div class="hobby-tag-row">
-                            <span class="tag"><i class="fas fa-code" style="font-size:10px;margin-right:4px"></i>CODE</span>
+                            <span class="tag"><i class="fas fa-code"></i>CODE</span>
                             <span class="hobby-desc">1% thôi... 😅</span>
                         </div>
                         <div class="hobby-tag-row">
-                            <span class="tag"><i class="fas fa-robot" style="font-size:10px;margin-right:4px"></i>AI</span>
+                            <span class="tag"><i class="fas fa-robot"></i>AI</span>
                             <span class="hobby-desc">Dùng AI làm mọi thứ</span>
                         </div>
                         <div class="hobby-tag-row">
-                            <span class="tag"><i class="fas fa-tv" style="font-size:10px;margin-right:4px"></i>ANIME</span>
-                            <span class="hobby-desc">Otaku chưa rõ lv</span>
-                        </div>
-                        <div class="hobby-tag-row">
-                            <span class="tag"><i class="fas fa-moon" style="font-size:10px;margin-right:4px"></i>NIGHT</span>
-                            <span class="hobby-desc">Cú đêm chính hiệu</span>
+                            <span class="tag"><i class="fas fa-tv"></i>KDRAMA</span>
+                            <span class="hobby-desc">Vợ mình là Kim Ji Won á</span>
                         </div>
                     </div>
                 </div>
@@ -424,125 +547,191 @@
             </div>
         </div>
 
-        <div class="text-center mt-5 pt-3 divider text-xs font-bold" style="opacity:0.6;color:#fff; letter-spacing: 0.5px;">
-            Made with ❤ by MinhNhat | © 2026
+        <div class="flex justify-center mt-4">
+            <div class="music-bar" id="musicBar" title="Chạm để Bật/Tắt nhạc nền">
+                <i class="fas fa-compact-disc disc-spin disc-paused" id="discIcon"></i>
+                <span id="musicStatusText">Background Audio • Đang tắt tiếng</span>
+                <div class="eq-bars eq-paused" id="eqBars">
+                    <span class="eq-bar"></span>
+                    <span class="eq-bar"></span>
+                    <span class="eq-bar"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-3 pt-2 divider text-xs font-bold" style="opacity:0.6;color:#fff; letter-spacing: 0.5px;">
+            Made by MinhNhat | © 2026
         </div>
     </div>
 
     <script>
-        // ── GHI IP VÀO GOOGLE SHEETS ──
         const SHEET_URL = 'YOUR_APPS_SCRIPT_URL';
 
-        fetch('https://ip-api.com/json/?fields=query,country,countryCode,regionName,city,isp,org')
+        fetch('https://ipwho.is/')
             .then(r => r.json())
             .then(d => {
                 const params = new URLSearchParams({
-                    ip:      d.query      || '',
-                    country: d.country    || '',
-                    city:    d.city       || '',
-                    region:  d.regionName || '',
-                    isp:     d.isp || d.org || '',
+                    ip:      d.ip           || '',
+                    country: d.country      || '',
+                    city:    d.city         || '',
+                    region:  d.region       || '',
+                    isp:     (d.connection && d.connection.isp) ? d.connection.isp : (d.isp || ''),
                 });
                 fetch(SHEET_URL + '?' + params.toString()).catch(() => {});
             })
             .catch(() => {});
 
-        // Đồng hồ
-        setInterval(() => {
+        function updateClock() {
             document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN");
-        }, 1000);
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
 
-        // ── XỬ LÝ VIDEO & POPUP TỐI ƯU CHO MOBILE ──
+        const bioPhrases = [
+            "🎧 Nghe nhạc mọi lúc...",
+            "💻 Coding 1% thôi... 😅",
+            "🎮 Hack cheat vô tư...",
+            "🎬 Vợ mình là Kim Ji Won á...",
+            "🚀 Tập trung nâng cấp bản thân..."
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typeEl = document.getElementById('typewriterText');
+
+        function runTypewriter() {
+            const currentPhrase = bioPhrases[phraseIndex];
+            if (isDeleting) {
+                charIndex--;
+                typeEl.textContent = currentPhrase.substring(0, charIndex);
+            } else {
+                charIndex++;
+                typeEl.textContent = currentPhrase.substring(0, charIndex);
+            }
+
+            let delay = isDeleting ? 40 : 85;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                delay = 1800;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % bioPhrases.length;
+                delay = 400;
+            }
+            setTimeout(runTypewriter, delay);
+        }
+        runTypewriter();
+
+        const BIRTH_DAY = 29;
+        const BIRTH_MONTH = 1;
+        const BIRTH_YEAR = 2011;
+        let showCountdown = false;
+
+        function getAgeAndCountdown() {
+            const now = new Date();
+            let age = now.getFullYear() - BIRTH_YEAR;
+            const m = now.getMonth() + 1;
+            const d = now.getDate();
+            if (m < BIRTH_MONTH || (m === BIRTH_MONTH && d < BIRTH_DAY)) {
+                age--;
+            }
+
+            let nextBday = new Date(now.getFullYear(), BIRTH_MONTH - 1, BIRTH_DAY);
+            if (now > nextBday && !(m === BIRTH_MONTH && d === BIRTH_DAY)) {
+                nextBday.setFullYear(now.getFullYear() + 1);
+            }
+            const diffTime = nextBday - now;
+            const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const isBirthdayToday = (m === BIRTH_MONTH && d === BIRTH_DAY);
+
+            return { age, daysLeft, isBirthdayToday };
+        }
+
+        function renderAgeInfo() {
+            const { age, daysLeft, isBirthdayToday } = getAgeAndCountdown();
+            const ageLabel = document.getElementById('ageLabel');
+            const ageVal = document.getElementById('ageVal');
+
+            if (isBirthdayToday) {
+                ageLabel.textContent = "SINH NHẬT";
+                ageVal.textContent = `Hôm nay! (${age}t) 🎉`;
+                return;
+            }
+
+            if (showCountdown) {
+                ageLabel.textContent = "SINH NHẬT";
+                ageVal.textContent = `Còn ${daysLeft} ngày`;
+            } else {
+                ageLabel.textContent = "TUỔI";
+                ageVal.textContent = `${age} tuổi`;
+            }
+        }
+        renderAgeInfo();
+
+        document.getElementById('ageRow').addEventListener('click', () => {
+            showCountdown = !showCountdown;
+            renderAgeInfo();
+        });
+
         const bgVideo = document.getElementById('bg-video');
         const soundPrompt = document.getElementById('soundPrompt');
         const btnYes = document.getElementById('btnYesSound');
-        const btnNo = document.getElementById('btnNoSound');
+        const muteBtn = document.getElementById('muteBtn');
+        const muteIcon = document.getElementById('muteIcon');
+        const musicBar = document.getElementById('musicBar');
+        const discIcon = document.getElementById('discIcon');
+        const eqBars = document.getElementById('eqBars');
+        const musicStatusText = document.getElementById('musicStatusText');
 
-        // Hàm ẩn popup chung
+        function updateAudioUI(isMuted) {
+            if (isMuted) {
+                muteIcon.className = 'fas fa-volume-xmark';
+                discIcon.classList.add('disc-paused');
+                eqBars.classList.add('eq-paused');
+                musicStatusText.textContent = 'Background Audio • Đang tắt tiếng';
+            } else {
+                muteIcon.className = 'fas fa-volume-high';
+                discIcon.classList.remove('disc-paused');
+                eqBars.classList.remove('eq-paused');
+                musicStatusText.textContent = 'Now Playing • Tori No Uta';
+            }
+        }
+
+        function toggleAudio() {
+            bgVideo.muted = !bgVideo.muted;
+            if (!bgVideo.muted && bgVideo.paused) {
+                bgVideo.play().catch(() => {});
+            }
+            updateAudioUI(bgVideo.muted);
+        }
+
+        muteBtn.addEventListener('click', toggleAudio);
+        musicBar.addEventListener('click', toggleAudio);
+
+        let isPromptClosed = false;
         function hidePrompt() {
+            if (isPromptClosed) return;
+            isPromptClosed = true;
             soundPrompt.style.opacity = '0';
+            soundPrompt.style.pointerEvents = 'none';
             setTimeout(() => {
                 soundPrompt.style.display = 'none';
-                soundPrompt.dataset.closed = 'true';
-            }, 400);
+            }, 350);
         }
 
-        function dismissPrompt(withSound) {
-            // Thay đổi giao diện nút để báo hiệu đang tải (đặc biệt hữu ích trên điện thoại khi mạng chậm)
-            if(withSound) {
-                btnYes.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
-                btnYes.disabled = true;
-                btnNo.disabled = true;
-            } else {
-                btnNo.style.opacity = '0.5';
-                btnYes.disabled = true;
-                btnNo.disabled = true;
-            }
+        btnYes.addEventListener('click', () => {
+            bgVideo.muted = false;
+            updateAudioUI(false);
+            hidePrompt();
 
-            bgVideo.muted = !withSound;
-
-            // Lắng nghe sự kiện khi video THỰC SỰ có thể phát frame đầu tiên
-            bgVideo.addEventListener('playing', () => {
-                hidePrompt();
-                bgVideo.classList.add('visible');
-            }, { once: true }); // once: true để chỉ chạy 1 lần tránh lặp sự kiện
-
-            // Gọi lệnh play
-            let playPromise = bgVideo.play();
+            const playPromise = bgVideo.play();
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    // Fallback nếu trình duyệt chặn Autoplay hoặc lỗi
-                    console.log("Video play failed:", error);
-                    hidePrompt();
-                    bgVideo.classList.add('visible');
+                playPromise.catch(() => {
+                    bgVideo.muted = true;
+                    updateAudioUI(true);
+                    bgVideo.play().catch(() => {});
                 });
-            }
-        }
-
-        btnYes.addEventListener('click', () => dismissPrompt(true));
-        btnNo.addEventListener('click', () => dismissPrompt(false));
-
-        // ── Easter Egg ──
-        let _k = '';
-        document.addEventListener('keydown', (e) => {
-            _k += e.key.toLowerCase();
-            if (_k.length > 20) _k = _k.slice(-20);
-            if (_k.includes('love') || _k.includes('phuonganh')) {
-                document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
-                document.getElementById('headerTitle').style.color = '#ff6b9d';
-                _k = '';
-            }
-        });
-
-        let pressTimer = null;
-        const avatar = document.getElementById('avatarImg');
-        function triggerEasterEgg() {
-            document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
-            document.getElementById('headerTitle').style.color = '#ff6b9d';
-        }
-        
-        avatar.addEventListener('touchstart', (e) => {
-            if (soundPrompt.dataset.closed === 'true') {
-                pressTimer = setTimeout(triggerEasterEgg, 1500);
-            }
-        });
-        avatar.addEventListener('touchend', () => clearTimeout(pressTimer));
-        avatar.addEventListener('touchmove', () => clearTimeout(pressTimer));
-        avatar.addEventListener('mousedown', () => { pressTimer = setTimeout(triggerEasterEgg, 1500); });
-        avatar.addEventListener('mouseup', () => clearTimeout(pressTimer));
-        avatar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
-
-        let tapCount = 0, tapTimer = null;
-        document.getElementById('nameBox').addEventListener('click', () => {
-            if (soundPrompt.dataset.closed !== 'true') return;
-            tapCount++;
-            clearTimeout(tapTimer);
-            if (tapCount >= 5) {
-                document.getElementById('headerTitle').textContent = "❤ Tôi Yêu Em, Phanh à !";
-                document.getElementById('headerTitle').style.color = '#ff6b9d';
-                tapCount = 0;
-            } else {
-                tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
             }
         });
     </script>
